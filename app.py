@@ -27,18 +27,15 @@ class MainHandler(tornado.web.RequestHandler):
 					self.set_cookie("oauth_access_token", access["access_token"][0])
 					self.set_cookie("oauth_login", access["login"][0])
 					self.set_cookie("oauth_apiKey", access["apiKey"][0])
-					self.play();
+					self.redirect("/");
 				
 			except tornado.httpclient.HTTPError, e:
 				print "There was an Error:", e
 		elif not self.get_cookie("oauth_access_token") :
 			self.redirect("https://bitly.com/oauth/authorize?client_id={0}&redirect_uri={1}".format(client_id,app_url))
 		else :
-			self.play()
-
-	def play(self):
-		f = open("static/websocket.html")
-		self.write(f.read());
+			f = open("static/websocket.html")
+			self.write(f.read());
 
 class EchoWebSocket(tornado.websocket.WebSocketHandler):
 	def open(self):
